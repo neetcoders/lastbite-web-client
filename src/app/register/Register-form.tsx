@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 
-const Loginform = () => {
+const Registerform = () => {
   const validationSchema = Yup.object().shape({
     nama: Yup.string()
       .min(3, "Nama harus memiliki 3 - 72 karakter")
@@ -154,4 +154,4 @@ const Loginform = () => {
   );
 };
 
-export default Loginform;
+export default Registerform;
