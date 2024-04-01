@@ -12,10 +12,12 @@ const Registerform = () => {
     email: Yup.string()
       .email("Email tidak valid")
       .required("Email harus diisi"),
-    birthdate: Yup.date()
+    birthdate: Yup.string()
       .required("Tanggal lahir harus diisi")
-      .max(new Date(), "Tidak valid")
-      .typeError("The value must be a date (YYYY-MM-DD)"),
+      .matches(
+        /^\d{4}-\d{2}-\d{2}$/,
+        "Format tanggal tidak tepat (YYYY-MM-DD)"
+      ),
     password: Yup.string()
       .required("Password harus diisi")
       .min(8, "Password harus memiliki 8 - 127 karakter")
