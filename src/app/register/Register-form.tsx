@@ -12,16 +12,24 @@ const Registerform = () => {
     email: Yup.string()
       .email("Email tidak valid")
       .required("Email harus diisi"),
-    password: Yup.string().required("Password harus diisi"),
+    birthdate: Yup.date()
+      .required("Tanggal lahir harus diisi")
+      .max(new Date(), "Tidak valid")
+      .typeError("The value must be a date (YYYY-MM-DD)"),
+    password: Yup.string()
+      .required("Password harus diisi")
+      .min(8, "Password harus memiliki 8 - 127 karakter")
+      .max(127, "Password harus memiliki 8 - 127 karakter"),
     confirmpassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Password tidak cocok")
-    .required("Konfirmasi Password harus diisi"),
+      .oneOf([Yup.ref("password")], "Password tidak cocok")
+      .required("Konfirmasi Password harus diisi"),
   });
 
   const handleSubmit = (
     values: {
       nama: string;
       email: string;
+      birthdate: string;
       password: string;
       confirmpassword: string;
     },
@@ -33,6 +41,7 @@ const Registerform = () => {
       values: {
         nama: "",
         email: "",
+        birthdate: "",
         password: "",
         confirmpassword: "",
       },
@@ -47,6 +56,7 @@ const Registerform = () => {
           initialValues={{
             nama: "",
             email: "",
+            birthdate: "",
             password: "",
             confirmpassword: "",
           }}
@@ -93,6 +103,24 @@ const Registerform = () => {
                 </div>
 
                 <div className="flex flex-col gap-1">
+                  <label className="text-typo-main font-bold" htmlFor="email">
+                    Birth Date <span className="text-danger-main">*</span>
+                  </label>
+                  <Field
+                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    type="text"
+                    id="birthdate"
+                    name="birthdate"
+                    placeholder="YYYY-MM-DD"
+                  />
+                  {touched.birthdate && errors.birthdate && (
+                    <p className="text-caption text-danger-main">
+                      {errors.birthdate}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-1">
                   <label
                     className="text-typo-main font-bold"
                     htmlFor="password"
@@ -131,8 +159,8 @@ const Registerform = () => {
                     </p>
                   )}
                 </div>
-
               </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
