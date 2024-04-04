@@ -1,0 +1,109 @@
+import Navbar from "@/components/Navbar/Navbar";
+import ProductCard from "@/components/ProductCard";
+import React from "react";
+
+const dummyData = [
+  {
+    productId: 1,
+    productName: "Chitato Sapi",
+    originPrice: "10.000",
+    salePrice: "5.000",
+    location: "Sakinah, Jawa Timur",
+  },
+  {
+    productId: 2,
+    productName: "Chitato Ayam",
+    originPrice: "10.000",
+    salePrice: "6.500",
+    location: "Rungkut, Jawa Timur",
+  },
+  {
+    productId: 3,
+    productName: "Chitato Kambing",
+    originPrice: "10.000",
+    salePrice: "7.000",
+    location: "Medokan, Jawa Timur",
+  },
+  {
+    productId: 4,
+    productName: "Chitato Domba",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+  {
+    productId: 5,
+    productName: "Chitato Jerapah",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+  {
+    productId: 6,
+    productName: "Chitato Gajah",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+  {
+    productId: 7,
+    productName: "Chitato Sapi",
+    originPrice: "10.000",
+    salePrice: "5.000",
+    location: "Sakinah, Jawa Timur",
+  },
+  {
+    productId: 8,
+    productName: "Chitato Ayam",
+    originPrice: "10.000",
+    salePrice: "6.500",
+    location: "Rungkut, Jawa Timur",
+  },
+  {
+    productId: 9,
+    productName: "Chitato Kambing",
+    originPrice: "10.000",
+    salePrice: "7.000",
+    location: "Medokan, Jawa Timur",
+  },
+  {
+    productId: 10,
+    productName: "Chitato Domba",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+  {
+    productId: 11,
+    productName: "Chitato Jerapah",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+  {
+    productId: 12,
+    productName: "Chitato Gajah",
+    originPrice: "10.000",
+    salePrice: "6.000",
+    location: "Waru, Jawa Timur",
+  },
+];
+
+const DashboardPage = () => {
+  return (
+    <div className="w-full px-[7%] py-12 grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
+      {dummyData.map((data) => (
+        <ProductCard
+          key={data.productId}
+          productId={data.productId}
+          productName={data.productName}
+          originPrice={data.originPrice}
+          salePrice={data.salePrice}
+          location={data.location}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default DashboardPage;
