@@ -2,6 +2,7 @@
 import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
+import { HiOutlineHome } from "react-icons/hi";
 
 const Loginform = () => {
   const validationSchema = Yup.object().shape({
@@ -20,14 +21,28 @@ const Loginform = () => {
     actions.resetForm({
       values: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     });
   };
 
   return (
     <div className="flex flex-col gap-8 justify-center items-center w-full min-h-screen">
-      <h3 className="text-success-main font-bold text-h3">Login</h3>
+      <div className="flex flex-col gap-[27px] w-[80%] lg:w-[60%]">
+        <Link href={"/"}>
+          <div className="flex items-center gap-2.5">
+            <span className="text-success-main text-h6">
+              <HiOutlineHome />
+            </span>
+            <p className="text-paragraph font-bold underline text-success-main">
+              Back to homepage
+            </p>
+          </div>
+        </Link>
+        <div className="flex">
+          <h3 className="flex text-success-main font-bold text-h3">Login</h3>
+        </div>
+      </div>
       <div className="flex w-[80%] lg:w-[60%]">
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -42,7 +57,11 @@ const Loginform = () => {
                     Email <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.email && errors.email
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="email"
                     id="email"
                     name="email"
@@ -62,7 +81,11 @@ const Loginform = () => {
                     Password <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.password && errors.password
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="password"
                     id="password"
                     name="password"

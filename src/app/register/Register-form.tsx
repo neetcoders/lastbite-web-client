@@ -2,6 +2,7 @@
 import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
+import { HiOutlineHome } from "react-icons/hi";
 
 const Registerform = () => {
   const validationSchema = Yup.object().shape({
@@ -52,7 +53,21 @@ const Registerform = () => {
 
   return (
     <div className="flex flex-col gap-8 justify-center items-center w-full min-h-screen">
-      <h3 className="text-success-main font-bold text-h3">Register</h3>
+      <div className="flex flex-col w-[80%] lg:w-[60%]">
+        <Link href={"/"}>
+          <div className="flex items-center gap-2.5">
+            <span className="text-success-main text-h6">
+              <HiOutlineHome />
+            </span>
+            <p className="text-paragraph font-bold underline text-success-main">
+              Back to homepage
+            </p>
+          </div>
+        </Link>
+        <div className="flex">
+          <h3 className="flex text-success-main font-bold text-h3">Register</h3>
+        </div>
+      </div>
       <div className="flex w-[80%] lg:w-[60%]">
         <Formik
           initialValues={{
@@ -73,7 +88,11 @@ const Registerform = () => {
                     Nama <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.nama && errors.nama
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="text"
                     id="nama"
                     name="nama"
@@ -91,7 +110,11 @@ const Registerform = () => {
                     Email <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.email && errors.email
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="email"
                     id="email"
                     name="email"
@@ -109,7 +132,11 @@ const Registerform = () => {
                     Birth Date <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.birthdate && errors.birthdate
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="text"
                     id="birthdate"
                     name="birthdate"
@@ -130,7 +157,11 @@ const Registerform = () => {
                     Password <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.password && errors.password
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="password"
                     id="password"
                     name="password"
@@ -150,7 +181,11 @@ const Registerform = () => {
                     Confirm Password <span className="text-danger-main">*</span>
                   </label>
                   <Field
-                    className="bg-typo-white border-[1px] border-typo-main rounded-[5px] py-1.5 px-2 text-caption "
+                    className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
+                      touched.confirmpassword && errors.confirmpassword
+                        ? "border-danger-main"
+                        : "border-typo-main"
+                    }`}
                     type="password"
                     id="confirmpassword"
                     name="confirmpassword"
