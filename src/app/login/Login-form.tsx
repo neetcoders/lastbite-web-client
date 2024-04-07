@@ -3,8 +3,18 @@ import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
+import axios from "axios";
+import loginAction from "./loginAction";
+import { useRouter } from "next/navigation";
+
+interface ILoginSchema {
+  email: string;
+  password: string;
+}
 
 const Loginform = () => {
+  const router = useRouter();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Email tidak valid")
@@ -12,11 +22,9 @@ const Loginform = () => {
     password: Yup.string().required("Password harus diisi"),
   });
 
-  const handleSubmit = (
-    values: { email: string; password: string },
-    actions: any
-  ) => {
-    console.log("Data Form:", values);
+  const handleSubmit = async (values: ILoginSchema, actions: any) => {
+    (await loginAction(values)) ? router.push("/dashboard") : router.refresh();
+
     actions.setSubmitting(false);
     actions.resetForm({
       values: {

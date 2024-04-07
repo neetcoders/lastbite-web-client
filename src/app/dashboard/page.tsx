@@ -1,6 +1,9 @@
-import Navbar from "@/components/Navbar/Navbar";
+"use client"
+import BuyerAddress from "@/components/BuyerDashboard/BuyerAddress";
+import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductCard from "@/components/ProductCard";
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios"
 
 const dummyData = [
   {
@@ -90,18 +93,28 @@ const dummyData = [
 ];
 
 const DashboardPage = () => {
+
+
   return (
-    <div className="w-full px-[7%] py-12 grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
-      {dummyData.map((data) => (
-        <ProductCard
-          key={data.productId}
-          productId={data.productId}
-          productName={data.productName}
-          originPrice={data.originPrice}
-          salePrice={data.salePrice}
-          location={data.location}
-        />
-      ))}
+    <div className="w-full px-[7%] py-6 lg:py-12">
+      <div className="flex flex-col gap-9">
+        <BuyerAddress />
+
+        <InputSearch />
+
+        <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
+          {dummyData.map((data) => (
+            <ProductCard
+              key={data.productId}
+              productId={data.productId}
+              productName={data.productName}
+              originPrice={data.originPrice}
+              salePrice={data.salePrice}
+              location={data.location}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

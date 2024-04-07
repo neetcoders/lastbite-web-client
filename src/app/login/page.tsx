@@ -1,7 +1,9 @@
+'use server'
+
 import React from "react";
 import LoginPage from "./Login-form";
 
-const Login = () => {
+const Login = async () => {
 
   return (
     <div className="flex">

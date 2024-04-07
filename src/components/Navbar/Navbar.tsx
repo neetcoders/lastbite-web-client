@@ -10,7 +10,7 @@ import {
 
 function Navbar() {
   const [modal, setModal] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleModal = () => {
     setModal(!modal);
@@ -44,8 +44,8 @@ function Navbar() {
             <div className="flex flex-col text-caption font-bold text-black gap-2">
               {isLoggedIn ? (
                 <>
-                  <Link href={"/about"}>Profile &amp; Address</Link>
-                  <Link href={"/order"}>Cart</Link>
+                  <Link href={"dashboard/profile"}>Profile &amp; Address</Link>
+                  <Link href={"/cart"}>Cart</Link>
                 </>
               ) : (
                 <>
