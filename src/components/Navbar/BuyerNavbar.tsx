@@ -7,12 +7,17 @@ import Link from "next/link";
 
 interface BuyerNavbarProps {
   logoutHandler: () => void;
-  currentUser: {};
+  currentUser: {
+    display_name?: string;
+    email?: string;
+  };
 }
 
-const BuyerNavbar: React.FC<BuyerNavbarProps> = ({ logoutHandler, currentUser }) => {
-    
-  const isLoggedIn = currentUser ? true : false
+const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
+  logoutHandler,
+  currentUser,
+}) => {
+  const isLoggedIn = currentUser ? true : false;
   const [openDrawer, setOpenDrawer] = useState(false);
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -74,7 +79,9 @@ const BuyerNavbar: React.FC<BuyerNavbarProps> = ({ logoutHandler, currentUser })
               <span className="text-paragraph text-typo-white">
                 <FaRegUserCircle />
               </span>
-              <p className="text-title font-bold text-typo-white">{currentUser?.display_name}</p>
+              <p className="text-title font-bold text-typo-white">
+                {currentUser?.display_name}
+              </p>
               <p className="text-bodytext font-medium text-typo-white">
                 {currentUser?.email}
               </p>
