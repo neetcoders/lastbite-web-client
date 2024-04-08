@@ -247,6 +247,66 @@ const ButtonBlackSmall: React.FC<ButtonProps> = ({ text, onClick, to }) => {
   );
 };
 
+const ButtonDangerLarge: React.FC<ButtonProps> = ({ text, onClick, to }) => {
+  if (to) {
+    return (
+      <Link href={to}>
+        <button className="w-full px-[18px] py-[12px] bg-danger-main rounded-[12px] text-typo-white font-bold text-paragraph">
+          {text}
+        </button>
+      </Link>
+    );
+  }
+  return (
+    <button
+      onClick={onClick}
+      className="w-full px-[18px] py-[12px] bg-danger-main rounded-[12px] text-typo-white font-bold text-paragraph"
+    >
+      {text}
+    </button>
+  );
+};
+
+const ButtonDangerMedium: React.FC<ButtonProps> = ({ text, onClick, to }) => {
+  if (to) {
+    return (
+      <Link href={to}>
+        <button className="w-full px-[16px] py-[8px] bg-danger-main rounded-[12px] text-typo-white font-bold text-bodytext">
+          {text}
+        </button>
+      </Link>
+    );
+  }
+  return (
+    <button
+      onClick={onClick}
+      className="w-full px-[16px] py-[8px] bg-danger-main rounded-[12px] text-typo-white font-bold text-bodytext"
+    >
+      {text}
+    </button>
+  );
+};
+
+const ButtonDangerSmall: React.FC<ButtonProps> = ({ text, onClick, to }) => {
+  if (to) {
+    return (
+      <Link href={to}>
+        <button className="w-full px-[12px] py-[4px] bg-danger-main rounded-[12px] text-typo-white font-bold text-caption">
+          {text}
+        </button>
+      </Link>
+    );
+  }
+  return (
+    <button
+      onClick={onClick}
+      className="w-full px-[12px] py-[4px] bg-danger-main rounded-[12px] text-typo-white font-bold text-bodytext"
+    >
+      {text}
+    </button>
+  );
+};
+
 export {
   ButtonSuccessLarge,
   ButtonSuccessMedium,
@@ -260,4 +320,7 @@ export {
   ButtonBlackLarge,
   ButtonBlackMedium,
   ButtonBlackSmall,
+  ButtonDangerLarge,
+  ButtonDangerMedium,
+  ButtonDangerSmall
 };

@@ -2,8 +2,7 @@
 import BuyerAddress from "@/components/BuyerDashboard/BuyerAddress";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductCard from "@/components/ProductCard";
-import React, { useEffect } from "react";
-import axios from "axios"
+import React from "react";
 
 const dummyData = [
   {
@@ -93,7 +92,6 @@ const dummyData = [
 ];
 
 const DashboardPage = () => {
-
 
   return (
     <div className="w-full px-[7%] py-6 lg:py-12">
