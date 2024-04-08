@@ -5,12 +5,14 @@ import { IoCloseOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 
+interface ICurrentUser {
+  display_name: string;
+  email: string;
+}
+
 interface BuyerNavbarProps {
   logoutHandler: () => void;
-  currentUser: {
-    display_name?: string;
-    email?: string;
-  };
+  currentUser: ICurrentUser | null;
 }
 
 const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
