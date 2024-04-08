@@ -34,7 +34,7 @@ export default function RootLayout({
       
     } catch (error) {
       setCurrentUser(null);
-      console.error('Error fetching user data:', error.messagge);
+      console.error('Error fetching user data:', error);
     }
 
   };
