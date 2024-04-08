@@ -1,5 +1,4 @@
 "use client"
-import BuyerNavbar from "@/components/Navbar/BuyerNavbar";
 
 export default function RootLayout({
   children,
@@ -9,7 +8,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <BuyerNavbar />
+        {/* <BuyerNavbar /> */}
         {children}
       </body>
     </html>
