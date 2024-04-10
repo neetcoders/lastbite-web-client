@@ -1,10 +1,15 @@
-import React from "react";
+"use client";
+
+import React, { useContext } from "react";
 import { HiOutlinePencilAlt } from "react-icons/hi";
 import { FiTrash2 } from "react-icons/fi";
 import { ButtonSuccessMedium } from "@/components/Button/Button";
 import AddAddressModal from "@/components/BuyerProfilePage/AddAddressModal";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
 
-function page() {
+function Page() {
+  const user = useContext(AuthContext);
+
   return (
     <div className="flex flex-col px-[7%]">
       <h1 className="text-success-main text-h6 font-bold my-[30px]">Profile</h1>
@@ -12,21 +17,21 @@ function page() {
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Name</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            John Doe
+            {user?.display_name}
           </div>
         </div>
 
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Email</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            johndode@gmail.com
+            {user?.email}
           </div>
         </div>
 
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Birth Date</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            2024-04-04
+            {user?.birth_date.substring(0, 10)}
           </div>
         </div>
 
@@ -91,4 +96,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

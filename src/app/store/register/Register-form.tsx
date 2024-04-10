@@ -211,7 +211,7 @@ const Registerform = () => {
       </div>
       <p className="-mt-4 flex gap-1 text-caption text-typo-main">
         Already have an account?{" "}
-        <Link className="text-success-main font-semibold" href={"/login"}>
+        <Link className="text-success-main font-semibold" href={"/store/login"}>
           Login
         </Link>
       </p>

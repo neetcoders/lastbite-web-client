@@ -4,7 +4,8 @@ import StoreProductCard from "@/components/StoreProductCard";
 import Link from "next/link";
 import React from "react";
 import { FiPlus } from "react-icons/fi";
-import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
+import { AuthContext } from "@/app/services/StoreAuthContext";
 
 const dummyData = [
   {
@@ -95,7 +96,9 @@ const dummyData = [
 
 function StoreProductPage() {
   
-  const router = useRouter()
+  const store = useContext(AuthContext)
+
+  // console.log(store?.display_name)
   
   return (
     <div className="px-[7%] flex flex-col">

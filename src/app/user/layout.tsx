@@ -1,11 +1,10 @@
 "use client";
-
-import axios from "axios";
-import getAuthToken from "../services/getAuthToken";
-import { useEffect, useState } from "react";
+import BuyerNavbar from "@/components/Navbar/BuyerNavbar";
 import { useRouter } from "next/navigation";
-import SellerNavbar from "@/components/Navbar/SellerNavbar";
-import { AuthContextProvider } from "../services/StoreAuthContext";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import getAuthToken from "@/app/services/getAuthToken";
+import { AuthContextProvider } from "../services/BuyerAuthContext";
 
 export default function RootLayout({
   children,
@@ -17,44 +16,44 @@ export default function RootLayout({
   const logoutHandler = () => {
     document.cookie =
       "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    router.push("/store/login");
+    router.push("/user/login");
   };
 
-  const [currentStore, setCurrentStore] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  const getCurrentStore = async () => {
+  const getCurrentUser = async () => {
     try {
       const accessToken = await getAuthToken();
 
       if (accessToken === undefined) {
-        return setCurrentStore(null);
+        return setCurrentUser(null);
       } else {
         const response = await axios.get(
-          "http://localhost:8000/api/v1/store/me",
+          "http://localhost:8000/api/v1/users/me",
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         );
-        setCurrentStore(response.data.data);
+        setCurrentUser(response.data.data);
       }
     } catch (error) {
-      setCurrentStore(null);
+      setCurrentUser(null);
       console.error("Error fetching user data:", error);
     }
   };
 
   useEffect(() => {
-    getCurrentStore();
+    getCurrentUser();
   });
 
   return (
     <AuthContextProvider>
       <html lang="en">
         <body className="w-full">
-          <SellerNavbar
-            currentStore={currentStore}
+          <BuyerNavbar
+            currentUser={currentUser}
             logoutHandler={logoutHandler}
           />
           <div className="w-full py-[5%] px-[7%]">{children}</div>

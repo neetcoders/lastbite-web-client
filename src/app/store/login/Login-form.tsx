@@ -3,9 +3,8 @@ import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
-import axios from "axios";
-import loginAction from "./loginAction";
 import { useRouter } from "next/navigation";
+import loginAction from "./loginAction";
 
 interface ILoginSchema {
   email: string;
@@ -23,7 +22,7 @@ const Loginform = () => {
   });
 
   const handleSubmit = async (values: ILoginSchema, actions: any) => {
-    (await loginAction(values)) ? router.push("/dashboard") : router.refresh();
+    (await loginAction(values)) ? router.push("product") : router.refresh();
 
     actions.setSubmitting(false);
     actions.resetForm({
@@ -118,7 +117,7 @@ const Loginform = () => {
       </div>
       <p className="-mt-4 flex gap-1 text-caption text-typo-main">
         Don&#39;t have an account?{" "}
-        <Link className="text-success-main font-semibold" href={"/register"}>
+        <Link className="text-success-main font-semibold" href={"/store/register"}>
           Register
         </Link>
       </p>

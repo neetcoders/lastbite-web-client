@@ -1,15 +1,23 @@
 import axios from 'axios';
 import getAuthToken from './getAuthToken';
 
-const getCurrentUser = async (accessToken: string) => {
+const getCurrentUser = async () => {
 
-    // const accessToken = await getAuthToken()
+    const accessToken = await getAuthToken()
 
-    console.log('dari get user', accessToken)
+    try {
+        const response = await axios.get('http://localhost:8000/api/v1/users/me', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            }
+        })
+        
+        return 1
+        
+    } catch (error) {
+        return 0
+    }
 
-    // const response = await axios.get('http://localhost:8000/api/v1/users/me', {
-    //     headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //     }
-    // })
 }
+
+export default getCurrentUser

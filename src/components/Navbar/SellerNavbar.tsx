@@ -5,28 +5,24 @@ import { IoCloseOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { HiChevronDoubleRight } from "react-icons/hi";
-import {
-  ButtonBlackMedium,
-  ButtonWhiteMedium,
-} from "../Button/Button";
+import { ButtonBlackMedium, ButtonWhiteMedium } from "../Button/Button";
 
-interface ICurrentUser {
+interface ICurrentStore {
   display_name: string;
   email: string;
-  birth_date: Date;
   active_address: null;
 }
 
-interface BuyerNavbarProps {
+interface SellerNavbarProps {
   logoutHandler: () => void;
-  currentUser: ICurrentUser | null;
+  currentStore: ICurrentStore | null;
 }
 
-const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
+const SellerNavbar: React.FC<SellerNavbarProps> = ({
   logoutHandler,
-  currentUser,
+  currentStore,
 }) => {
-  const isLoggedIn = currentUser ? true : false;
+  const isLoggedIn = currentStore ? true : false;
   const [openDrawer, setOpenDrawer] = useState(false);
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -107,40 +103,26 @@ const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
                   <FaRegUserCircle />
                 </span>
                 <p className="text-title font-bold text-typo-white">
-                  {currentUser?.display_name}
+                  {currentStore?.display_name}
                 </p>
                 <p className="text-bodytext font-medium text-typo-white">
-                  {currentUser?.email}
+                  {currentStore?.email}
                 </p>
               </div>
               <div className="flex flex-col justify-start items-start text-left gap-5">
                 <Link
-                  href={"/user/dashboard"}
+                  href={"/store/product"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
-                  Dashboard
+                  Product
                 </Link>
                 <Link
-                  href={"/user/profile"}
+                  href={"/store/order"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
-                  Profile
-                </Link>
-                <Link
-                  href={"/user/cart"}
-                  onClick={() => setOpenDrawer(false)}
-                  className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
-                >
-                  Cart
-                </Link>
-                <Link
-                  href={"/user/my-order"}
-                  onClick={() => setOpenDrawer(false)}
-                  className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
-                >
-                  My Order
+                  Order
                 </Link>
                 <button
                   onClick={logoutHandler}
@@ -166,29 +148,29 @@ const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
 
               <div className="flex flex-col justify-start items-start text-left gap-5">
                 <Link
-                  href={"/user/dashboard"}
+                  href={"/store/product"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
                   Dashboard
                 </Link>
                 <Link
-                  href={"/user/about"}
+                  href={"/store/about"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
                   About us
                 </Link>
                 <Link
-                  href={"/user/order"}
+                  href={"/store/order"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
                   Order
                 </Link>
                 <div className="flex flex-col w-full gap-4">
-                  <ButtonBlackMedium text="Register" to="/user/register" />
-                  <ButtonWhiteMedium text="Login" to="/user/login" />
+                  <ButtonBlackMedium text="Register" to="/store/register" />
+                  <ButtonWhiteMedium text="Login" to="/store/login" />
                 </div>
               </div>
             </div>
@@ -202,4 +184,4 @@ const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
   );
 };
 
-export default BuyerNavbar;
+export default SellerNavbar;

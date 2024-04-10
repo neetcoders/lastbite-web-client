@@ -4,7 +4,6 @@ import React from "react";
 
 function DetailPage({ params }: any) {
   return (
-    // py sementara nanti dihapus
     <div className="flex flex-col px-[7%] gap-14"> 
       <h1 className="text-h5 font-bold text-success-main">Product Detail</h1>
       <div className="flex flex-col gap-14">

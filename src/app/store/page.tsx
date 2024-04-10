@@ -2,7 +2,7 @@ import React from 'react'
 
 function page() {
   return (
-    <div>page</div>
+    <div className='flex w-full min-h-screen justify-center items-center'>Store Landing Page</div>
   )
 }
 

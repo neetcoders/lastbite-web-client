@@ -1,8 +1,11 @@
-"use client"
+"use client";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
+import getCurrentUser from "@/app/services/getCurrentUser";
 import BuyerAddress from "@/components/BuyerDashboard/BuyerAddress";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductCard from "@/components/ProductCard";
-import React from "react";
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
 
 const dummyData = [
   {
@@ -92,9 +95,10 @@ const dummyData = [
 ];
 
 const DashboardPage = () => {
+  const user = useContext(AuthContext);
 
   return (
-    <div className="w-full px-[7%] py-6 lg:py-12">
+    <div className="w-full px-[7%]">
       <div className="flex flex-col gap-9">
         <BuyerAddress />
 
