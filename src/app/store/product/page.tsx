@@ -1,105 +1,57 @@
-"use client"
+"use client";
 
 import StoreProductCard from "@/components/StoreProductCard";
-import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import { useContext } from 'react'
+import { useContext } from "react";
 import { AuthContext } from "@/app/services/StoreAuthContext";
+import axios from "axios";
+import getAuthToken from "@/app/services/getAuthToken";
 
-const dummyData = [
-  {
-    productId: 1,
-    productName: "Chitato Sapi",
-    originPrice: "10.000",
-    salePrice: "5.000",
-    stock: 10,
-  },
-  {
-    productId: 2,
-    productName: "Chitato Ayam",
-    originPrice: "10.000",
-    salePrice: "6.500",
-    stock: 10,
-  },
-  {
-    productId: 3,
-    productName: "Chitato Kambing",
-    originPrice: "10.000",
-    salePrice: "7.000",
-    stock: 10,
-  },
-  {
-    productId: 4,
-    productName: "Chitato Domba",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-  {
-    productId: 5,
-    productName: "Chitato Jerapah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-  {
-    productId: 6,
-    productName: "Chitato Gajah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-  {
-    productId: 7,
-    productName: "Chitato Sapi",
-    originPrice: "10.000",
-    salePrice: "5.000",
-    stock: 10,
-  },
-  {
-    productId: 8,
-    productName: "Chitato Ayam",
-    originPrice: "10.000",
-    salePrice: "6.500",
-    stock: 10,
-  },
-  {
-    productId: 9,
-    productName: "Chitato Kambing",
-    originPrice: "10.000",
-    salePrice: "7.000",
-    stock: 10,
-  },
-  {
-    productId: 10,
-    productName: "Chitato Domba",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-  {
-    productId: 11,
-    productName: "Chitato Jerapah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-  {
-    productId: 12,
-    productName: "Chitato Gajah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    stock: 10,
-  },
-];
+interface IStoreProduct {
+  id: string;
+  display_name: string;
+  price_after: string;
+  price_before: string;
+  stock: number;
+}
 
 function StoreProductPage() {
-  
-  const store = useContext(AuthContext)
+  const storeDataContext = useContext(AuthContext);
+  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
+  const [storeProducts, setStoreProducts] = useState<IStoreProduct[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
-  // console.log(store?.display_name)
-  
+  const getToken = async () => {
+    const token = await getAuthToken();
+    setAuthToken(token);
+  };
+
+  const getCurrentStoreProducts = async () => {
+    try {
+      const products = await axios.get(
+        "http://localhost:8000/api/v1/product/my-products",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+          data: {
+            email: storeDataContext?.email,
+          },
+        }
+      );
+      setStoreProducts(products.data.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(true);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+    getCurrentStoreProducts();
+  }, [authToken]);
+
   return (
     <div className="px-[7%] flex flex-col">
       <div className="flex justify-between my-4 items-center">
@@ -109,19 +61,22 @@ function StoreProductPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
-        {dummyData.map((data) => (
-            <Link key={data.productId} href={`product/${data.productId}`}>
-                <StoreProductCard
-                  productId={data.productId}
-                  productName={data.productName}
-                  originPrice={data.originPrice}
-                  salePrice={data.salePrice}
-                  stock={data.stock}
-                />
-            </Link>
-        ))}
-      </div>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
+          {storeProducts.map((data) => (
+              <StoreProductCard
+                key={data.id}
+                productId={data.id}
+                productName={data.display_name}
+                originPrice={data.price_before}
+                salePrice={data.price_after}
+                stock={data.stock}
+              />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
