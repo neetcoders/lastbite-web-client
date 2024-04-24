@@ -4,7 +4,9 @@ import Link from "next/link";
 import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import loginAction from "./loginAction";
+import { login } from "@/app/services/storeService";
+import { useContext } from "react";
+import { AuthContext } from "@/app/services/StoreAuthContext";
 
 interface ILoginSchema {
   email: string;
@@ -13,6 +15,8 @@ interface ILoginSchema {
 
 const Loginform = () => {
   const router = useRouter();
+  
+  const { refetchCurrentStore } = useContext(AuthContext); 
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -22,7 +26,14 @@ const Loginform = () => {
   });
 
   const handleSubmit = async (values: ILoginSchema, actions: any) => {
-    (await loginAction(values)) ? router.push("product") : router.refresh();
+    const loginRequest = await login(values);
+    if (loginRequest) {
+      refetchCurrentStore();
+      router.push("product");
+    }
+    else {
+      router.refresh();
+    }
 
     actions.setSubmitting(false);
     actions.resetForm({

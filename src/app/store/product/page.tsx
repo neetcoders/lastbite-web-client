@@ -1,56 +1,24 @@
 "use client";
 
+import { IProduct, getMyProducts } from "@/app/services/productService";
 import StoreProductCard from "@/components/StoreProductCard";
-import React, { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import { useContext } from "react";
-import { AuthContext } from "@/app/services/StoreAuthContext";
-import axios from "axios";
-import getAuthToken from "@/app/services/getAuthToken";
-
-interface IStoreProduct {
-  id: string;
-  display_name: string;
-  price_after: string;
-  price_before: string;
-  stock: number;
-}
 
 function StoreProductPage() {
-  const storeDataContext = useContext(AuthContext);
-  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
-  const [storeProducts, setStoreProducts] = useState<IStoreProduct[] | []>([]);
+  const [storeProducts, setStoreProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const getToken = async () => {
-    const token = await getAuthToken();
-    setAuthToken(token);
-  };
-
-  const getCurrentStoreProducts = async () => {
-    try {
-      const products = await axios.get(
-        "http://localhost:8000/api/v1/product/my-products",
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-          data: {
-            email: storeDataContext?.email,
-          },
-        }
-      );
-      setStoreProducts(products.data.data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(true);
-    }
-  };
+  const getCurrentStoreProducts = useCallback(async () => {
+    setLoading(true);
+    const products = await getMyProducts();
+    setStoreProducts(products || []);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    getToken();
     getCurrentStoreProducts();
-  }, [authToken]);
+  }, [getCurrentStoreProducts]);
 
   return (
     <div className="px-[7%] flex flex-col">
