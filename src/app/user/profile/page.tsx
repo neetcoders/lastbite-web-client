@@ -8,7 +8,7 @@ import AddAddressModal from "@/components/BuyerProfilePage/AddAddressModal";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
 
 function Page() {
-  const user = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <div className="flex flex-col px-[7%]">
@@ -17,21 +17,21 @@ function Page() {
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Name</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            {user?.display_name}
+            {currentUser?.display_name}
           </div>
         </div>
 
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Email</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            {user?.email}
+            {currentUser?.email}
           </div>
         </div>
 
         <div className="flex flex-col gap-1">
           <h2 className="text-bodytext font-bold text-typo-main">Birth Date</h2>
           <div className="text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            {user?.birth_date.substring(0, 10)}
+            {currentUser?.birth_date.substring(0, 10)}
           </div>
         </div>
 

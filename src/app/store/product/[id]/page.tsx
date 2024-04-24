@@ -1,8 +1,10 @@
 "use client"
 
+import { IProduct, getProductDetails } from "@/app/services/productService";
 import { ButtonDangerLarge, ButtonSuccessLarge } from "@/components/Button/Button";
+import Image from "next/image";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface IProductCategory {
     slug: string;
@@ -20,24 +22,28 @@ interface IProductDetails {
 }
 
 function DetailPage({ params }: any) {
-    const url = `http://localhost:8000/api/v1/product/${params.id}`
+    const [productDetails, setProductDetails] = useState<IProduct | null>(null);
 
-    const [productDetails, setProductDetails] = useState<IProductDetails>()
-
-    const getProductDetails = async () => {
-        const response = await axios(url)
-        setProductDetails(response.data.data)
-    }
+    const fetchProductDetails = useCallback(async () => {
+        const product = await getProductDetails(params.id);
+        setProductDetails(product);
+    }, [params.id]);
 
     useEffect(() => {
-        getProductDetails()
-    })
+        fetchProductDetails();
+    }, [fetchProductDetails]);
 
   return (
     <div className="flex flex-col px-[7%] gap-14"> 
       <h1 className="text-h5 font-bold text-success-main">Product Detail</h1>
       <div className="flex flex-col gap-14">
-        <img src="https://placehold.co/100x100" alt="product-image" className="w-[150px] h-[150px] mx-auto"/>
+        <Image 
+            src={productDetails?.image_url || "https://placehold.co/100x100"} 
+            width={150}
+            height={150}
+            alt="Product Image" 
+            className="w-[150px] h-[150px] mx-auto"
+        />
 
         <div className="flex flex-col lg:flex-row">
             <div className="flex flex-col gap-2 lg:w-1/2">

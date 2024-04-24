@@ -1,57 +1,35 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
-import getAuthToken from "./getAuthToken";
-import axios from "axios";
+import { createContext, ReactNode, useState, useEffect, useCallback } from "react";
+import { getAuthToken } from "./authTokenService";
+import { IStore, getCurrentStore } from "./storeService";
 
 interface Props {
   children?: ReactNode;
 }
-
-interface IStoreAddress {
-    street: string;
-    longtitude: string;
-    latitude: string;
-}
-
-interface IStore {
-  email: string;
-  display_name: string;
-  address: IStoreAddress
-}
-
-const AuthContext = createContext<IStore | undefined>(undefined);
+const AuthContext = createContext<{currentStore?: IStore, refetchCurrentStore: () => void}>({
+  currentStore: undefined,
+  refetchCurrentStore: () => {},
+});
 
 const AuthContextProvider = ({ children }: Props) => {
-  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
-  const [currentStoreData, setCurrentStoreData] = useState<IStore | undefined>(undefined);
+  const [currentStore, setCurrentStore] = useState<IStore | undefined>(undefined);
 
-  const getToken = async () => {
-    const token = await getAuthToken();
-    setAuthToken(token);
-  };
+  const refetchCurrentStore = useCallback(async () => {
+    const authToken = await getAuthToken();
   
-  const getCurrentStore = async () => {
-    if(authToken === undefined) {
-      setCurrentStoreData(undefined)
-    } else {
-      try {
-        const response = await axios.get("http://localhost:8000/api/v1/store/me", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setCurrentStoreData(response.data.data)
-      } catch (error) {
-        setCurrentStoreData(undefined)
-      }
+    if (!authToken) {
+      setCurrentStore(undefined);
     }
-  };
+    else {
+      const store = await getCurrentStore();
+      setCurrentStore(store);
+    }
+  }, []);
 
   useEffect(() => {
-    getToken();
-    getCurrentStore();
-  })
+    refetchCurrentStore();
+  }, [refetchCurrentStore]);
 
-  return <AuthContext.Provider value={currentStoreData}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{currentStore, refetchCurrentStore}}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthContextProvider };

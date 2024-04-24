@@ -3,17 +3,29 @@ import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
+import { register } from "@/app/services/userService";
+import { useRouter } from "next/navigation";
+
+interface IRegisterSchema {
+  display_name: string;
+  email: string;
+  birth_date: string;
+  password: string;
+  confirm_password: string;
+} 
 
 const Registerform = () => {
+  const router = useRouter();
+
   const validationSchema = Yup.object().shape({
-    nama: Yup.string()
+    display_name: Yup.string()
       .min(3, "Nama harus memiliki 3 - 72 karakter")
       .max(72, "Nama harus memiliki 3 - 72 karakter")
       .required("Nama harus diisi"),
     email: Yup.string()
       .email("Email tidak valid")
       .required("Email harus diisi"),
-    birthdate: Yup.string()
+    birth_date: Yup.string()
       .required("Tanggal lahir harus diisi")
       .matches(
         /^\d{4}-\d{2}-\d{2}$/,
@@ -23,30 +35,29 @@ const Registerform = () => {
       .required("Password harus diisi")
       .min(8, "Password harus memiliki 8 - 127 karakter")
       .max(127, "Password harus memiliki 8 - 127 karakter"),
-    confirmpassword: Yup.string()
+    confirm_password: Yup.string()
       .oneOf([Yup.ref("password")], "Password tidak cocok")
       .required("Konfirmasi Password harus diisi"),
   });
 
-  const handleSubmit = (
-    values: {
-      nama: string;
-      email: string;
-      birthdate: string;
-      password: string;
-      confirmpassword: string;
-    },
-    actions: any
-  ) => {
-    console.log("Data Form:", values);
+  const handleSubmit = async (values: IRegisterSchema, actions: any) => {
+    const registerRequest = await register(values);
+
+    if (registerRequest) {
+      router.push("/user/login");      
+    }
+    else {
+      router.refresh();
+    }
+
     actions.setSubmitting(false);
     actions.resetForm({
       values: {
-        nama: "",
+        display_name: "",
         email: "",
-        birthdate: "",
+        birth_date: "",
         password: "",
-        confirmpassword: "",
+        confirm_password: "",
       },
     });
   };
@@ -71,11 +82,11 @@ const Registerform = () => {
       <div className="flex w-[80%] lg:w-[60%]">
         <Formik
           initialValues={{
-            nama: "",
+            display_name: "",
             email: "",
-            birthdate: "",
+            birth_date: "",
             password: "",
-            confirmpassword: "",
+            confirm_password: "",
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -84,23 +95,23 @@ const Registerform = () => {
             <Form className="flex flex-col gap-8 w-full">
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1">
-                  <label className="text-typo-main font-bold" htmlFor="nama">
+                  <label className="text-typo-main font-bold" htmlFor="display_name">
                     Nama <span className="text-danger-main">*</span>
                   </label>
                   <Field
                     className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
-                      touched.nama && errors.nama
+                      touched.display_name && errors.display_name
                         ? "border-danger-main"
                         : "border-typo-main"
                     }`}
                     type="text"
-                    id="nama"
-                    name="nama"
+                    id="display_name"
+                    name="display_name"
                     placeholder="John Doe"
                   />
-                  {touched.nama && errors.nama && (
+                  {touched.display_name && errors.display_name && (
                     <p className="text-caption text-danger-main">
-                      {errors.nama}
+                      {errors.display_name}
                     </p>
                   )}
                 </div>
@@ -128,23 +139,23 @@ const Registerform = () => {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label className="text-typo-main font-bold" htmlFor="email">
+                  <label className="text-typo-main font-bold" htmlFor="birth_date">
                     Birth Date <span className="text-danger-main">*</span>
                   </label>
                   <Field
                     className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
-                      touched.birthdate && errors.birthdate
+                      touched.birth_date && errors.birth_date
                         ? "border-danger-main"
                         : "border-typo-main"
                     }`}
                     type="text"
-                    id="birthdate"
-                    name="birthdate"
+                    id="birth_date"
+                    name="birth_date"
                     placeholder="YYYY-MM-DD"
                   />
-                  {touched.birthdate && errors.birthdate && (
+                  {touched.birth_date && errors.birth_date && (
                     <p className="text-caption text-danger-main">
-                      {errors.birthdate}
+                      {errors.birth_date}
                     </p>
                   )}
                 </div>
@@ -176,23 +187,23 @@ const Registerform = () => {
                 <div className="flex flex-col gap-1">
                   <label
                     className="text-typo-main font-bold"
-                    htmlFor="confirmpassword"
+                    htmlFor="confirm_password"
                   >
                     Confirm Password <span className="text-danger-main">*</span>
                   </label>
                   <Field
                     className={`bg-typo-white border-[1px] rounded-[5px] py-1.5 px-2 text-caption ${
-                      touched.confirmpassword && errors.confirmpassword
+                      touched.confirm_password && errors.confirm_password
                         ? "border-danger-main"
                         : "border-typo-main"
                     }`}
                     type="password"
-                    id="confirmpassword"
-                    name="confirmpassword"
+                    id="confirm_password"
+                    name="confirm_password"
                   />
-                  {touched.confirmpassword && errors.confirmpassword && (
+                  {touched.confirm_password && errors.confirm_password && (
                     <p className="text-caption text-danger-main">
-                      {errors.confirmpassword}
+                      {errors.confirm_password}
                     </p>
                   )}
                 </div>

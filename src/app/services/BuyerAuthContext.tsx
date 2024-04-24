@@ -1,52 +1,36 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
-import getAuthToken from "./getAuthToken";
-import axios from "axios";
+import { createContext, ReactNode, useState, useEffect, useCallback } from "react";
+import { getAuthToken } from "./authTokenService";
+import { IUser, getCurrentUser } from "./userService";
 
 interface Props {
   children?: ReactNode;
 }
 
-interface IUser {
-  email: string;
-  display_name: string;
-  birth_date: string;
-  active_address: string;
-}
-
-const AuthContext = createContext<IUser | undefined>(undefined);
+const AuthContext = createContext<{currentUser?: IUser, refetchCurrentUser: () => void}>({
+  currentUser: undefined,
+  refetchCurrentUser: () => {},
+});
 
 const AuthContextProvider = ({ children }: Props) => {
-  const [authToken, setAuthToken] = useState<string | undefined>(undefined);
-  const [currentUserData, setCurrentUserData] = useState<IUser | undefined>(undefined);
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
 
-  const getToken = async () => {
-    const token = await getAuthToken();
-    setAuthToken(token);
-  };
+  const refetchCurrentUser = useCallback(async () => {
+    const authToken = await getAuthToken();
   
-  const getCurrentUser = async () => {
-    if(authToken === undefined) {
-      setCurrentUserData(undefined)
-    } else {
-      try {
-        const response = await axios.get("http://localhost:8000/api/v1/users/me", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setCurrentUserData(response.data.data)
-      } catch (error) {
-        setCurrentUserData(undefined)
-      }
+    if (!authToken) {
+      setCurrentUser(undefined);
     }
-  };
+    else {
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+    }
+  }, []);
 
   useEffect(() => {
-    getToken();
-    getCurrentUser();
-  })
+    refetchCurrentUser();
+  }, [refetchCurrentUser]);
 
-  return <AuthContext.Provider value={currentUserData}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{currentUser, refetchCurrentUser}}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthContextProvider };
