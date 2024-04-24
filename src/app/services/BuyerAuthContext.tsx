@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
+import { createContext, ReactNode, useState, useEffect, useCallback } from "react";
 import { getAuthToken } from "./authTokenService";
 import { IUser, getCurrentUser } from "./userService";
 
@@ -6,28 +6,31 @@ interface Props {
   children?: ReactNode;
 }
 
-const AuthContext = createContext<IUser | undefined>(undefined);
+const AuthContext = createContext<{currentUser?: IUser, refetchCurrentUser: () => void}>({
+  currentUser: undefined,
+  refetchCurrentUser: () => {},
+});
 
 const AuthContextProvider = ({ children }: Props) => {
-  const [currentUserData, setCurrentUserData] = useState<IUser | undefined>(undefined);
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const authToken = await getAuthToken();
+  const refetchCurrentUser = useCallback(async () => {
+    const authToken = await getAuthToken();
   
-      if (!authToken) {
-        setCurrentUserData(undefined);
-      }
-      else {
-        const user = await getCurrentUser();
-        setCurrentUserData(user);
-      }
+    if (!authToken) {
+      setCurrentUser(undefined);
     }
-    
-    getUser();
+    else {
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+    }
   }, []);
 
-  return <AuthContext.Provider value={currentUserData}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    refetchCurrentUser();
+  }, [refetchCurrentUser]);
+
+  return <AuthContext.Provider value={{currentUser, refetchCurrentUser}}>{children}</AuthContext.Provider>;
 };
 
 export { AuthContext, AuthContextProvider };
