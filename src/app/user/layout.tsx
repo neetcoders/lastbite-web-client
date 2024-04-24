@@ -1,10 +1,10 @@
 "use client";
 import BuyerNavbar from "@/components/Navbar/BuyerNavbar";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import getAuthToken from "@/app/services/getAuthToken";
+import { useEffect, useState } from "react";
+import { getAuthToken } from "@/app/services/authTokenService";
 import { AuthContextProvider } from "../services/BuyerAuthContext";
+import { IUser, getCurrentUser, logout } from "../services/userService";
 
 export default function RootLayout({
   children,
@@ -13,40 +13,27 @@ export default function RootLayout({
 }>) {
   const router = useRouter();
 
-  const logoutHandler = () => {
-    document.cookie =
-      "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    router.push("/user/login");
+  const logoutHandler = async () => {
+    logout().then(() => router.push("/user/login"));
   };
 
-  const [currentUser, setCurrentUser] = useState(null);
-
-  const getCurrentUser = async () => {
-    try {
-      const accessToken = await getAuthToken();
-
-      if (accessToken === undefined) {
-        return setCurrentUser(null);
-      } else {
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/users/me",
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        setCurrentUser(response.data.data);
-      }
-    } catch (error) {
-      setCurrentUser(null);
-      console.error("Error fetching user data:", error);
-    }
-  };
+  const [currentUser, setCurrentUser] = useState<IUser | undefined>(undefined);
 
   useEffect(() => {
-    getCurrentUser();
-  });
+    const getUser = async () => {
+      const accessToken = await getAuthToken();
+
+      if (!accessToken) {
+        setCurrentUser(undefined);
+      } 
+      else {
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+      }
+    };
+
+    getUser();
+  }, []);
 
   return (
     <AuthContextProvider>
