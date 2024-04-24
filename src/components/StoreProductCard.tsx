@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 interface IStoreProductCardProps {
   productId: string;
   productName: string;
+  productImage?: string;
   originPrice: string;
   salePrice: string;
   stock: number;
@@ -14,7 +15,7 @@ function StoreProductCard(props: IStoreProductCardProps) {
 
   const router = useRouter()
 
-  const { productId, productName, originPrice, salePrice, stock } = props;
+  const { productId, productName, productImage, originPrice, salePrice, stock } = props;
 
   const handleDetailProduct = (productId : string) => {
     router.push(`product/${productId}`)
@@ -24,7 +25,14 @@ function StoreProductCard(props: IStoreProductCardProps) {
     <button onClick={() => handleDetailProduct(productId)}>
       <div className="flex flex-col text-left gap-[15px] w-full h-[262px] border-[1px] justify-center border-typo-main rounded-[5px] px-2 py-2.5">
         <div className="flex justify-center">
-          <img src="https://placehold.co/100x100" alt="product-image" />
+          {/* <img src="https://placehold.co/100x100" alt="product-image" /> */}
+          <Image 
+            src={productImage || "https://placehold.co/100x100"} 
+            width={150}
+            height={150}
+            alt="Product Image" 
+            className="w-[100px] h-[100px] mx-auto"
+        />
         </div>
         <div className="flex flex-col gap-[7px]">
           <p className="text-paragraph font-bold text-typo-main truncate ...">

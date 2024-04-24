@@ -1,11 +1,9 @@
 "use client";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
-import getCurrentUser from "@/app/services/getCurrentUser";
 import BuyerAddress from "@/components/BuyerDashboard/BuyerAddress";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductCard from "@/components/ProductCard";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 
 const dummyData = [
   {

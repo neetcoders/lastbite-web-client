@@ -37,6 +37,7 @@ function StoreProductPage() {
               <StoreProductCard
                 key={data.id}
                 productId={data.id}
+                productImage={data.image_url}
                 productName={data.display_name}
                 originPrice={data.price_before}
                 salePrice={data.price_after}
