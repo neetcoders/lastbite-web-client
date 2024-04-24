@@ -9,12 +9,10 @@ export default function RootLayout({
 }>) {
   return (
     <AuthContextProvider>
-      <html lang="en">
-        <body className="w-full">
+        <div className="w-full">
           <BuyerNavbar />
           <div className="w-full py-[5%] px-[7%]">{children}</div>
-        </body>
-      </html>
+        </div>
     </AuthContextProvider>
   );
 }
