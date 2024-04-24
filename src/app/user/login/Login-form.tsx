@@ -3,8 +3,8 @@ import { Formik, Form, Field } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
-import loginAction from "./loginAction";
 import { useRouter } from "next/navigation";
+import { login } from "@/app/services/userService";
 
 interface ILoginSchema {
   email: string;
@@ -22,7 +22,13 @@ const Loginform = () => {
   });
 
   const handleSubmit = async (values: ILoginSchema, actions: any) => {
-    (await loginAction(values)) ? router.push("dashboard") : router.refresh();
+    const loginRequest = await login(values);
+    if (loginRequest) {
+      router.push("dashboard");
+    }
+    else {
+      router.refresh();
+    }
 
     actions.setSubmitting(false);
     actions.resetForm({

@@ -3,6 +3,11 @@
 import { getAuthToken, setAuthToken, unsetAuthToken } from "./authTokenService";
 import apiClient, { ResponseSchema } from "./apiClient";
 
+export type ILoginRequest = {
+  email: string;
+  password: string;
+}
+
 export type ILogin = {
   user: IUser;
   authorization: string;
@@ -17,9 +22,13 @@ export type IUser = {
   updated_at: string;
 }
 
-export async function login(email: string, password: string) {
+export async function login(request: ILoginRequest) {
   try {
-    const response = await apiClient.post<ResponseSchema<ILogin>>("/users/login", { email, password });
+    const response = await apiClient.post<ResponseSchema<ILogin>>("/users/login", {
+      email: request.email,
+      password: request.password,
+    });
+    
     const token = response.data.data.authorization;
     await setAuthToken(token);
 
