@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { HiOutlineHome } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { login } from "@/app/services/userService";
+import { useContext } from "react";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
 
 interface ILoginSchema {
   email: string;
@@ -13,6 +15,8 @@ interface ILoginSchema {
 
 const Loginform = () => {
   const router = useRouter();
+
+  const { refetchCurrentUser } = useContext(AuthContext);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -24,6 +28,7 @@ const Loginform = () => {
   const handleSubmit = async (values: ILoginSchema, actions: any) => {
     const loginRequest = await login(values);
     if (loginRequest) {
+      refetchCurrentUser();
       router.push("dashboard");
     }
     else {
