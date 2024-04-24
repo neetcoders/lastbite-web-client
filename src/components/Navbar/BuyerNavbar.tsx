@@ -9,17 +9,11 @@ import {
   ButtonBlackMedium,
   ButtonWhiteMedium,
 } from "../Button/Button";
-
-interface ICurrentUser {
-  display_name: string;
-  email: string;
-  birth_date: Date;
-  active_address: null;
-}
+import { IUser } from "@/app/services/userService";
 
 interface BuyerNavbarProps {
   logoutHandler: () => void;
-  currentUser: ICurrentUser | null;
+  currentUser?: IUser;
 }
 
 const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
