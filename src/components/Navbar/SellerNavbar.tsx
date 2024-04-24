@@ -1,29 +1,28 @@
 import { AiOutlineMenu } from "react-icons/ai";
 import LastbiteLogo from "../LastbiteLogo";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { HiChevronDoubleRight } from "react-icons/hi";
 import { ButtonBlackMedium, ButtonWhiteMedium } from "../Button/Button";
+import { useRouter } from "next/navigation";
+import { AuthContext } from "@/app/services/StoreAuthContext";
+import { logout } from "@/app/services/storeService";
 
-interface ICurrentStore {
-  display_name: string;
-  email: string;
-  active_address: null;
-}
 
-interface SellerNavbarProps {
-  logoutHandler: () => void;
-  currentStore: ICurrentStore | null;
-}
-
-const SellerNavbar: React.FC<SellerNavbarProps> = ({
-  logoutHandler,
-  currentStore,
-}) => {
+const SellerNavbar = () => {
+  const router = useRouter();
+  const { currentStore, refetchCurrentStore } = useContext(AuthContext);
   const isLoggedIn = currentStore ? true : false;
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const logoutHandler = async () => {
+    await logout();
+    refetchCurrentStore();
+    router.push("/store/login");
+  }
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       const isDrawerOpen = openDrawer;
