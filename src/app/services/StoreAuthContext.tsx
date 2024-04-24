@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
-import getAuthToken from "./getAuthToken";
+import { getAuthToken } from "./authTokenService";
 import axios from "axios";
 
 interface Props {
