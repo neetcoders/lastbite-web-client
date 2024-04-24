@@ -1,6 +1,6 @@
 import { AiOutlineMenu } from "react-icons/ai";
 import LastbiteLogo from "../LastbiteLogo";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import Link from "next/link";
@@ -9,19 +9,23 @@ import {
   ButtonBlackMedium,
   ButtonWhiteMedium,
 } from "../Button/Button";
-import { IUser } from "@/app/services/userService";
+import { logout } from "@/app/services/userService";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
+import { useRouter } from "next/navigation";
 
-interface BuyerNavbarProps {
-  logoutHandler: () => void;
-  currentUser?: IUser;
-}
 
-const BuyerNavbar: React.FC<BuyerNavbarProps> = ({
-  logoutHandler,
-  currentUser,
-}) => {
+const BuyerNavbar = () => {
+  const router = useRouter();
+  const { currentUser, refetchCurrentUser } = useContext(AuthContext);
   const isLoggedIn = currentUser ? true : false;
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const logoutHandler = async () => {
+    await logout();
+    refetchCurrentUser();
+    router.push("/user/login");
+  }
+
   useEffect(() => {
     function handleClickOutside(event: any) {
       const isDrawerOpen = openDrawer;
