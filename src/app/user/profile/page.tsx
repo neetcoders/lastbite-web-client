@@ -1,17 +1,63 @@
 "use client";
 
-import React, { useContext } from "react";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import { FiTrash2 } from "react-icons/fi";
-import { ButtonSuccessMedium } from "@/components/Button/Button";
+import React, { useContext, useState } from "react";
+import { FiPlus } from "react-icons/fi";
 import AddAddressModal from "@/components/BuyerProfilePage/AddAddressModal";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
+import { useCallback } from "react";
+import { IAddress } from "@/app/services/addressService";
+import { addNewAddress } from "@/app/services/addressService";
+import AddressCard from "@/components/BuyerProfilePage/AddressCard";
+import { getMyAddress } from "@/app/services/addressService";
+import { useEffect } from "react";
+
+interface IAddressFormData {
+  street: string;
+  longitude: number;
+  latitude: number;
+}
 
 function Page() {
   const { currentUser } = useContext(AuthContext);
+  const [addresses, setAddresses] = useState<IAddress>();
+  const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const addAddressModalHandler = async () => {
+    setIsAddAddressModalOpen(!isAddAddressModalOpen);
+  };
+
+  const handleAddAddressSubmit = useCallback(async (formData: IAddressFormData) => {
+    const addedAddressData = {
+      street: formData.street,
+      longitude: formData.longitude,
+      latitude: formData.latitude,
+    };
+    
+    await addNewAddress(addedAddressData);
+    setIsAddAddressModalOpen(false);
+    window.location.reload();
+  }, []);
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      const data = await getMyAddress();
+      if (data) {
+        setAddresses(data);
+        setLoading(false);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
 
   return (
     <div className="flex flex-col px-[7%]">
+      <AddAddressModal
+        isOpen={isAddAddressModalOpen}
+        onClose={addAddressModalHandler}
+        onSubmit={handleAddAddressSubmit}
+      />
       <h1 className="text-success-main text-h6 font-bold my-[30px]">Profile</h1>
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-1">
@@ -36,61 +82,27 @@ function Page() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h2 className="text-bodytext font-bold text-typo-main">Address</h2>
-
-          <div className="flex justify-between text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            <div className="flex flex-col justify-center">
-              <p>Jl. Bekasi Raya No. 44, Jakarta Selatan</p>
-              <p>-167.170544827814</p>
-              <p>69.7681315313788</p>
-            </div>
-
-            <div className="flex flex-col justify-center gap-1">
-              <button className="text-h6 text-typo-main">
-                <HiOutlinePencilAlt />
-              </button>
-              <button className="text-h6 text-typo-main">
-                <FiTrash2 />
-              </button>
+          <div className="flex justify-between items-center">
+            <h2 className="text-bodytext font-bold text-typo-main">Address</h2>
+            <div className="rounded-full bg-success-main p-2 hover:cursor-pointer hover:bg-success-hover active:bg-success-active">
+              <FiPlus className="text-typo-white text-h6" onClick={addAddressModalHandler} />
             </div>
           </div>
-
-          <div className="flex justify-between text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            <div className="flex flex-col justify-center">
-              <p>Jl. Bekasi Raya No. 44, Jakarta Selatan</p>
-              <p>-167.170544827814</p>
-              <p>69.7681315313788</p>
-            </div>
-
-            <div className="flex flex-col justify-center gap-1">
-              <button className="text-h6 text-typo-main">
-                <HiOutlinePencilAlt />
-              </button>
-              <button className="text-h6 text-typo-main">
-                <FiTrash2 />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-between text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
-            <div className="flex flex-col justify-center">
-              <p>Jl. Bekasi Raya No. 44, Jakarta Selatan</p>
-              <p>-167.170544827814</p>
-              <p>69.7681315313788</p>
-            </div>
-
-            <div className="flex flex-col justify-center gap-1">
-              <button className="text-h6 text-typo-main">
-                <HiOutlinePencilAlt />
-              </button>
-              <button className="text-h6 text-typo-main">
-                <FiTrash2 />
-              </button>
-            </div>
-          </div>
+          
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            addresses.map((address: IAddress) => (
+              <AddressCard
+                key={address.id}
+                id={address.id}
+                street={address.street}
+                longitude={address.longitude}
+                latitude={address.latitude}
+              />
+            ))
+          )}
         </div>
-
-        <ButtonSuccessMedium text="Add New Address" />
       </div>
     </div>
   );
