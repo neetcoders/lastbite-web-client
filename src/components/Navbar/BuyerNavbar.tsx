@@ -100,7 +100,7 @@ const BuyerNavbar = () => {
                   </button>
                 </span>
               </div>
-              <div className="flex flex-col gap-2 overflow-auto">
+              <div className="flex flex-col gap-2 overflow-clip">
                 <span className="text-paragraph text-typo-white">
                   <FaRegUserCircle />
                 </span>

@@ -106,3 +106,36 @@ export async function addNewProduct ( newProductData : any ) {
     return null;
   }
 }
+
+export async function getPublicProduct ( searchedProduct? : string ){
+  try {
+    const response = await apiClient.get<ResponseSchema<IProduct[]>>(`/product/public?limit=20&offset=0&distance=10000&search=${searchedProduct || 'indomie'}`)
+    if(response.data.data){
+      return response.data.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getUserNearestProduct (searchedProduct? : string){
+  try {
+    const token = await getAuthToken()
+    const response = await apiClient.get<ResponseSchema<IProduct[]>>(`/product?limit=20&offset=0&distance=10000&search=${searchedProduct || 'indomie'}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    if(response.data.data){
+      return response.data.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

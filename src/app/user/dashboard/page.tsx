@@ -1,119 +1,87 @@
 "use client";
+import { getMyAddress } from "@/app/services/addressService";
+import { getUserActiveAddress, IAddress } from "@/app/services/addressService";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
+import { getPublicProduct, getUserNearestProduct, IProduct } from "@/app/services/productService";
 import BuyerAddress from "@/components/BuyerDashboard/BuyerAddress";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductCard from "@/components/ProductCard";
-import { useContext } from "react";
-
-const dummyData = [
-  {
-    productId: 1,
-    productName: "Chitato Sapi",
-    originPrice: "10.000",
-    salePrice: "5.000",
-    location: "Sakinah, Jawa Timur",
-  },
-  {
-    productId: 2,
-    productName: "Chitato Ayam",
-    originPrice: "10.000",
-    salePrice: "6.500",
-    location: "Rungkut, Jawa Timur",
-  },
-  {
-    productId: 3,
-    productName: "Chitato Kambing",
-    originPrice: "10.000",
-    salePrice: "7.000",
-    location: "Medokan, Jawa Timur",
-  },
-  {
-    productId: 4,
-    productName: "Chitato Domba",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-  {
-    productId: 5,
-    productName: "Chitato Jerapah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-  {
-    productId: 6,
-    productName: "Chitato Gajah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-  {
-    productId: 7,
-    productName: "Chitato Sapi",
-    originPrice: "10.000",
-    salePrice: "5.000",
-    location: "Sakinah, Jawa Timur",
-  },
-  {
-    productId: 8,
-    productName: "Chitato Ayam",
-    originPrice: "10.000",
-    salePrice: "6.500",
-    location: "Rungkut, Jawa Timur",
-  },
-  {
-    productId: 9,
-    productName: "Chitato Kambing",
-    originPrice: "10.000",
-    salePrice: "7.000",
-    location: "Medokan, Jawa Timur",
-  },
-  {
-    productId: 10,
-    productName: "Chitato Domba",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-  {
-    productId: 11,
-    productName: "Chitato Jerapah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-  {
-    productId: 12,
-    productName: "Chitato Gajah",
-    originPrice: "10.000",
-    salePrice: "6.000",
-    location: "Waru, Jawa Timur",
-  },
-];
+import { useCallback, useContext, useEffect, useState } from "react";
 
 const DashboardPage = () => {
-  const user = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
+
+  const [userActiveAddress, setUserActiveAddress] = useState<IAddress | null>(
+    null
+  );
+  const [productDisplayed, setProductDisplayed] = useState<IProduct[] | null>(
+    null
+  );
+
+  const [searchParams, setSearchParams] = useState<string>()
+
+  const getActiveAddress = useCallback(async () => {
+    if (currentUser == undefined) {
+      setUserActiveAddress(null);
+    } else {
+      const address = await getUserActiveAddress();
+      setUserActiveAddress(address);
+    }
+  }, [currentUser]);
+
+  const getProductDisplayed = useCallback(async () => {
+    if (currentUser == undefined) {
+      const publicProduct = await getPublicProduct(searchParams);
+      if (publicProduct) {
+        setProductDisplayed(publicProduct);
+      } else {
+        setProductDisplayed(null)
+      }
+    } else {
+      const userNearestProduct = await getUserNearestProduct(searchParams);
+      if (userNearestProduct) {
+        setProductDisplayed(userNearestProduct);
+      } else {
+        setProductDisplayed(null)
+      }
+    }
+  }, [currentUser, searchParams]);
+
+  const handleSearchProductSubmit = useCallback(async (searchProduct: string) => {
+    setSearchParams(searchProduct);
+  }, []);
+
+  useEffect(() => {
+    getProductDisplayed();
+    getActiveAddress();
+  }, [getProductDisplayed, getActiveAddress]);
 
   return (
     <div className="w-full px-[7%]">
       <div className="flex flex-col gap-9">
-        <BuyerAddress />
+        <BuyerAddress street={userActiveAddress?.street} />
 
-        <InputSearch />
+        <InputSearch onSubmit={handleSearchProductSubmit}/>
 
-        <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
-          {dummyData.map((data) => (
-            <ProductCard
-              key={data.productId}
-              productId={data.productId}
-              productName={data.productName}
-              originPrice={data.originPrice}
-              salePrice={data.salePrice}
-              location={data.location}
-            />
-          ))}
-        </div>
+        {searchParams}
+
+        {productDisplayed != null ? (
+          <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
+            {productDisplayed?.map((data) => (
+              <ProductCard
+                key={data.id}
+                productId={data.id}
+                productName={data.display_name}
+                originPrice={data.price_before}
+                salePrice={data.price_after}
+                location={data.store?.address?.street}
+                image_url={data.image_url}
+              />
+            ))}
+          </div>
+        ) : <div>No Product Found</div>
+        }
+
       </div>
     </div>
   );

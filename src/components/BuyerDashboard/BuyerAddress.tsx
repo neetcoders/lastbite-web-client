@@ -1,7 +1,7 @@
 import React from "react";
 import { IoChevronDown } from "react-icons/io5";
 
-function BuyerAddress() {
+function BuyerAddress( street : any ) {
   return (
     <div className="flex justify-between">
       <div className="flex gap-1 items-center">
@@ -11,7 +11,7 @@ function BuyerAddress() {
         </span>
       </div>
       <p className="text-typo-outline1 text-bodytext text-right lg:text-paragraph ">
-        Jl. Kenanga Blok K9 No. 10, Surabaya, Jawa Timur
+        {street.street}
       </p>
     </div>
   );
