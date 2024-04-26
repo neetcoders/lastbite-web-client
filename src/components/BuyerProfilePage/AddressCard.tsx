@@ -30,22 +30,22 @@ interface IAddressFormData {
 
 export default function AddressCard(props: IAddressCardProps) {
   const { id, street, longitude, latitude } = props;
-  const [isEditAddressModalOpen, setisEditAddressModalOpen] = useState(false);
-  const [addressDetails, setaddressDetails] = useState<IAddress | null>(null);
+  const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
+  const [addressDetails, setAddressDetails] = useState<IAddress[] | null | undefined>([]);
 
   const editAddressModalHandler = async () => {
-    setisEditAddressModalOpen(!isEditAddressModalOpen);
+    setIsEditAddressModalOpen(!isEditAddressModalOpen);
   };
 
   const handleEditAddressSubmit = useCallback(async (formData: IAddressFormData) => {
     await editAddress(id, formData);
-    setisEditAddressModalOpen(false);
+    setIsEditAddressModalOpen(false);
     window.location.reload();
   }, [id]);
 
   const fetchaddressDetails = useCallback(async () => {
     const product = await getMyAddress();
-    setaddressDetails(product);
+    setAddressDetails(product);
   }, [id]);
 
   const deleteAddressHandler = useCallback( async () => {
@@ -63,7 +63,6 @@ export default function AddressCard(props: IAddressCardProps) {
         isOpen={isEditAddressModalOpen}
         onClose={editAddressModalHandler}
         onSubmit={handleEditAddressSubmit}
-        addressDatas={addressDetails}
       />
       <div className="flex justify-between text-caption text-typo-main border-[1px] border-typo-main rounded-[5px] p-2">
         <div className="flex flex-col justify-center">

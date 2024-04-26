@@ -19,14 +19,12 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (formData: FormData) => void;
-  addressDatas: IAddressDetails | null;
 }
 
 const EditAddressModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  addressDatas,
 }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -86,8 +84,7 @@ const EditAddressModal: React.FC<ModalProps> = ({
                 type="text"
                 name="street"
                 id="street"
-                placeholder="Input name"
-                defaultValue={addressDatas?.street}                
+                placeholder="Input name"             
               />
             </div>
 
@@ -104,7 +101,6 @@ const EditAddressModal: React.FC<ModalProps> = ({
                 name="longitude"
                 id="longitude"
                 placeholder="Input longitude"
-                defaultValue={addressDatas?.longitude}
               />
             </div>
 
@@ -121,7 +117,6 @@ const EditAddressModal: React.FC<ModalProps> = ({
                 name="latitude"
                 id="latitude"
                 placeholder="Input latitude"
-                defaultValue={addressDatas?.latitude}
               />
             </div>
 

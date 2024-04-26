@@ -27,7 +27,7 @@ export async function getMyAddress() {
   try {
     const token = await getAuthToken();
 
-    const response = await apiClient.get<ResponseSchema<IAddress>>("/address/all", {
+    const response = await apiClient.get<ResponseSchema<IAddress[]>>("/address/all", {
       headers: {
         Authorization: `Bearer ${token}`,
       }

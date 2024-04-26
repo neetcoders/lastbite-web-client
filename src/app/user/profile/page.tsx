@@ -19,7 +19,7 @@ interface IAddressFormData {
 
 function Page() {
   const { currentUser } = useContext(AuthContext);
-  const [addresses, setAddresses] = useState<IAddress>();
+  const [addresses, setAddresses] = useState<IAddress[]>([]);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -39,17 +39,16 @@ function Page() {
     window.location.reload();
   }, []);
 
-  useEffect(() => {
-    const fetchAddresses = async () => {
-      const data = await getMyAddress();
-      if (data) {
-        setAddresses(data);
-        setLoading(false);
-      }
-    };
-
-    fetchAddresses();
+  const getAddressList = useCallback(async () => {
+    setLoading(true);
+    const addressList = await getMyAddress();
+    setAddresses(addressList || []);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    getAddressList();
+  }, [getAddressList]);
 
   return (
     <div className="flex flex-col px-[7%]">
@@ -92,7 +91,7 @@ function Page() {
           {loading ? (
             <p>Loading...</p>
           ) : (
-            addresses.map((address: IAddress) => (
+            addresses?.map((address: IAddress) => (
               <AddressCard
                 key={address.id}
                 id={address.id}
