@@ -126,7 +126,7 @@ const BuyerNavbar = () => {
                   Profile
                 </Link>
                 <Link
-                  href={"/user/cart"}
+                  href={"/user/my-cart"}
                   onClick={() => setOpenDrawer(false)}
                   className="w-full px-[12px] py-[4px] bg-success-main rounded-[12px] text-typo-white font-bold text-caption hover:bg-typo-white hover:text-typo-main nav-link"
                 >
