@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import apiClient, { ResponseSchema } from "./apiClient";
 import { getAuthToken } from "./authTokenService";
 
@@ -67,6 +68,36 @@ export async function changeOrderStatus ( id : string, payload: {} ) {
         })
         // console.log(response.data.data)
         return response.data.data
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function addToCart ( product_id : string ) {
+    try {
+        const token = await getAuthToken();
+        const response = await apiClient.post<ResponseSchema<{}>>(`order/add`, { product_id } ,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return response.data.data
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function getUserCart (){
+    try {
+        const token = await getAuthToken();
+        const response = await apiClient.get<ResponseSchema<{}>>('/order?selected_only=true', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        return response.data.data;
     } catch (error) {
         console.error(error);
         return null;
