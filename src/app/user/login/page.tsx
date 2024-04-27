@@ -1,9 +1,12 @@
-'use server'
-
 import React from "react";
 import LoginPage from "./Login-form";
+import { Metadata } from "next";
 
-const Login = async () => {
+export const metadata: Metadata = {
+  title: 'Login Buyer Page',
+};
+
+export default function Login() {
 
   return (
     <div className="flex -my-[7%]">
@@ -16,4 +19,3 @@ const Login = async () => {
     </div>
   );
 };
-export default Login;

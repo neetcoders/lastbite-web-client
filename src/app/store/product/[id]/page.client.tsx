@@ -1,23 +1,66 @@
 "use client";
 
-import { addToCart } from "@/app/services/orderServices";
 import {
   IProduct,
+  deleteProductById,
+  editProduct,
   getProductDetails,
 } from "@/app/services/productService";
 import {
+  ButtonDangerLarge,
   ButtonSuccessLarge,
 } from "@/components/Button/Button";
+import EditProductModal from "@/components/StoreComponents/EditProductModal";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+
+interface IProductCategory {
+  slug: string;
+  display_name: string;
+}
+
+interface IProductDetails {
+  display_name: string;
+  description: string;
+  price_before: string;
+  price_after: string;
+  expiration_date: string;
+  stock: number;
+  category: IProductCategory;
+}
+
+interface IProductFormData {
+    name: string;
+    description: string;
+    price_before: number;
+    price_after: number;
+    exp_date: string;
+    // stock: number;
+    category: string;
+  }
 
 export default function DetailPage({ params }: any) {
 
-  const [productDetails, setProductDetails] = useState<IProduct | null>(null);
+  const router = useRouter()
 
-  const addToCartHandler = useCallback( async () => {
-    await addToCart(params.id);    
-  }, [params.id])
+  const [productDetails, setProductDetails] = useState<IProduct | null>(null);
+  const [isEditProductModalOpen, setIsEditProductModalOpen] = useState(false);
+
+  const editProductModalHandler = async () => {
+    setIsEditProductModalOpen(!isEditProductModalOpen);
+  };
+
+  const handleEditProductSubmit = useCallback(async (formData: IProductFormData) => {
+    await editProduct(params.id, formData);
+    setIsEditProductModalOpen(false);
+    window.location.reload();
+  }, [params.id]);
+
+  const deleteProductHandler = useCallback( async () => {
+        await deleteProductById(params.id);
+        router.push('/store/product')
+  }, [params.id]);
 
   const fetchProductDetails = useCallback(async () => {
     const product = await getProductDetails(params.id);
@@ -30,6 +73,12 @@ export default function DetailPage({ params }: any) {
 
   return (
     <div className="flex flex-col px-[7%] gap-14">
+      <EditProductModal
+        isOpen={isEditProductModalOpen}
+        onClose={editProductModalHandler}
+        onSubmit={handleEditProductSubmit}
+        productDatas={productDetails}
+      />
 
       <h1 className="text-h5 font-bold text-success-main">Product Detail</h1>
       <div className="flex flex-col gap-14">
@@ -73,22 +122,8 @@ export default function DetailPage({ params }: any) {
                 Rp{productDetails?.price_after}
               </p>
             </div>
-            <div className="flex flex-col gap-1">
-              <p className="text-title font-bold text-success-main">Store</p>
-              <p className="text-title font-bold text-typo-main">
-                {productDetails?.store.display_name}
-              </p>
-            </div>
           </div>
           <div className="flex flex-col gap-2 lg:w-1/2">
-            <div className="flex flex-col gap-1">
-              <p className="text-title font-bold text-success-main">
-                Store Address
-              </p>
-              <p className="text-title font-bold text-typo-main">
-                {productDetails?.store.address.street}
-              </p>
-            </div>
             <div className="flex flex-col gap-1">
               <p className="text-title font-bold text-success-main">Exp Date</p>
               <p className="text-title font-bold text-typo-main">
@@ -112,9 +147,10 @@ export default function DetailPage({ params }: any) {
 
         <div className="flex flex-col gap-4">
           <ButtonSuccessLarge
-            text="Add to Cart"
-            onClick={addToCartHandler}
+            text="Edit Product"
+            onClick={editProductModalHandler}
           />
+          <ButtonDangerLarge text="Delete Product" onClick={deleteProductHandler}/>
         </div>
       </div>
     </div>

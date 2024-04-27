@@ -5,6 +5,8 @@ import { getPublicProduct, IProduct } from "@/app/services/productService";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
 import ProductPublicCard from "@/components/ProductCard";
 import { useCallback, useEffect, useState } from "react";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
+import { useContext } from 'react';
 import Link from "next/link";
 
 export default function Home() {
@@ -12,9 +14,9 @@ export default function Home() {
   const [productDisplayed, setProductDisplayed] = useState<IProduct[] | null>(
     null
   );
-
   const [searchParams, setSearchParams] = useState<string>()
-
+  const { currentUser, refetchCurrentUser } = useContext(AuthContext);
+  
   const getProductDisplayed = useCallback(async () => {
     const publicProduct = await getPublicProduct(searchParams);
     setProductDisplayed(publicProduct);
@@ -24,7 +26,17 @@ export default function Home() {
     setSearchParams(searchProduct);
   }, []);
 
+  
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await refetchCurrentUser();
+      } catch (error) {
+        console.error('Error fetching current user:', error);
+      }
+    };
+    fetchData();
     getProductDisplayed();
   }, [getProductDisplayed]);
 

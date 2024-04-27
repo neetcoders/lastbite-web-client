@@ -6,10 +6,17 @@ import { CgMenu, CgClose } from "react-icons/cg";
 import { ButtonBlackLarge, ButtonWhiteLarge } from '../Button/Button';
 import { Menu, Transition } from '@headlessui/react';
 import { IoIosArrowDown } from "react-icons/io";
+import { logout } from "@/app/services/userService";
+import { AuthContext } from "@/app/services/BuyerAuthContext";
+import { useContext } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import clsxm from '@/lib/clsxm';
 
 export default function Navbar() {
+  const { currentUser, refetchCurrentUser } = useContext(AuthContext);
+  const isLoggedIn = currentUser ? true : false;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleShowNav = () => {
@@ -19,6 +26,24 @@ export default function Navbar() {
   const closeNav = () => {
     setIsOpen(false);
   };
+
+  const logoutHandler = async () => {
+    await logout();
+    refetchCurrentUser();
+    window.location.reload();
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await refetchCurrentUser();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <header className='sticky top-0 z-[100] w-full bg-success-main text-typo-white'>
@@ -52,61 +77,78 @@ export default function Navbar() {
                 </p>
               </Link>
             </li>
-            <li>
-              <Link href='/user/register'>
-                <ButtonBlackLarge text='Register'></ButtonBlackLarge>
-              </Link>
-            </li>
-            <li>
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <Menu.Button className="inline-flex w-full justify-center items-center rounded-xl py-3 px-3 text-sm font-medium text-white bg-typo-white focus:outline-none focus-visible:ring-2">
-                    <p className='text-paragraph text-typo-main font-bold'>
-                      Login
-                    </p>
-                  <IoIosArrowDown className="-mr-1 ml-2 h-5 w-5 text-typo-main"/>
-                  </Menu.Button>
+            {isLoggedIn ? (
+              <>
+              <li>
+                <Link href='/user/dashboard'>
+                  <ButtonWhiteLarge text='Dashboard'></ButtonWhiteLarge>
+                </Link>
+              </li>
+              <li>
+                <div onClick={logoutHandler}>
+                  <ButtonBlackLarge text='Logout'></ButtonBlackLarge>
                 </div>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                    <div className="px-1 py-1 ">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            className={`${
-                              active ? 'bg-success-hover text-white' : 'text-gray-900'
-                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            href='/user/login'
-                          >
-                            as customer
-                          </Link>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <Link
-                            className={`${
-                              active ? 'bg-success-hover text-white' : 'text-gray-900'
-                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                            href='/store/login'
-                          >
-                            as seller
-                          </Link>
-                        )}
-                      </Menu.Item>
+              </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link href='/user/register'>
+                    <ButtonBlackLarge text='Register'></ButtonBlackLarge>
+                  </Link>
+                </li>
+                <li>
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <Menu.Button className="inline-flex w-full justify-center items-center rounded-xl py-3 px-3 text-sm font-medium text-white bg-typo-white focus:outline-none focus-visible:ring-2">
+                        <p className='text-paragraph text-typo-main font-bold'>
+                          Login
+                        </p>
+                      <IoIosArrowDown className="-mr-1 ml-2 h-5 w-5 text-typo-main"/>
+                      </Menu.Button>
                     </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </li>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+                        <div className="px-1 py-1 ">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                className={`${
+                                  active ? 'bg-success-hover text-white' : 'text-gray-900'
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                href='/user/login'
+                              >
+                                as buyer
+                              </Link>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                className={`${
+                                  active ? 'bg-success-hover text-white' : 'text-gray-900'
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                href='/store/login'
+                              >
+                                as seller
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        </div>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
       </div>
@@ -178,7 +220,7 @@ export default function Navbar() {
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                               href='/user/login'
                             >
-                              as customer
+                              as buyer
                             </Link>
                           )}
                         </Menu.Item>

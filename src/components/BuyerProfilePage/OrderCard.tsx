@@ -55,9 +55,6 @@ function OrderCard(order: IOrder) {
       </h1>
 
       <div className="flex flex-col gap-2.5 px-2.5 py-3 border-[1px] border-typo-main rounded-[10px]">
-        <div className="text-caption text-typo-main font-semibold flex justify-end">
-          04/04/2024
-        </div>
 
         {order.products.map((product, index) => (
           <div key={index} className="flex gap-6 items-center p-2">
