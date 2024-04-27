@@ -61,6 +61,7 @@ export async function editProduct(id: string, formData: any) {
     expiration_date: formData.exp_date,
     // stock: formData.stock,
     category_slug: formData.category,
+    image_id: formData.image_id,
   };
   
   try {

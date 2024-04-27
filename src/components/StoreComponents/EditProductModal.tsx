@@ -17,6 +17,7 @@ interface IProductDetails {
   expiration_date: string;
   stock: number;
   category: IProductCategory;
+  image_url?: string;
 }
 
 interface FormData {
@@ -27,6 +28,7 @@ interface FormData {
   exp_date: string;
   // stock: number;
   category: string;
+  image_id?: string;
 }
 
 interface ModalProps {
@@ -52,6 +54,7 @@ const EditProductModal: React.FC<ModalProps> = ({
       exp_date: event.currentTarget.exp_date.value,
       // stock: event.currentTarget.stock.value,
       category: event.currentTarget.category.value,
+      image_id: productDatas?.image_url?.split(".")[0] || undefined,
     };
     onSubmit(formData);
   };

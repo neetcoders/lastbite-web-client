@@ -17,6 +17,7 @@ interface FormData {
   exp_date: string;
   stock: number;
   category: string;
+  file: FileList;
 }
 
 const AddProductModal: React.FC<ModalProps> = ({
@@ -36,8 +37,9 @@ const AddProductModal: React.FC<ModalProps> = ({
         exp_date: event.currentTarget.exp_date.value,
         stock: event.currentTarget.stock.value,
         category: event.currentTarget.category.value,
+        file: event.currentTarget.file.files,
     };
-    onSubmit(formData)
+    onSubmit(formData);
     
 };
 
@@ -90,6 +92,23 @@ const AddProductModal: React.FC<ModalProps> = ({
                 name="product_name"
                 id="product_name"
                 placeholder="Input name"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="product_name"
+                className="text-bodytext font-bold text-typo-main"
+              >
+                Image
+              </label>
+              <input
+                className="border-[1px] outline-none p-2 border-typo-main rounded-[5px] text-caption text-typo-outline1"
+                type="file"
+                name="file"
+                id="file"
+                placeholder="Select an image file"
+                accept=".png, .jpg, .jpeg, .webp"
               />
             </div>
 
