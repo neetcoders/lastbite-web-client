@@ -28,17 +28,19 @@ interface IProductDetails {
   expiration_date: string;
   stock: number;
   category: IProductCategory;
+  image_url?: string;
 }
 
 interface IProductFormData {
-    name: string;
-    description: string;
-    price_before: number;
-    price_after: number;
-    exp_date: string;
-    // stock: number;
-    category: string;
-  }
+  name: string;
+  description: string;
+  price_before: number;
+  price_after: number;
+  exp_date: string;
+  // stock: number;
+  category: string;
+  image_id?: string;
+}
 
 export default function DetailPage({ params }: any) {
 
@@ -60,7 +62,7 @@ export default function DetailPage({ params }: any) {
   const deleteProductHandler = useCallback( async () => {
         await deleteProductById(params.id);
         router.push('/store/product')
-  }, [params.id]);
+  }, [params.id, router]);
 
   const fetchProductDetails = useCallback(async () => {
     const product = await getProductDetails(params.id);
