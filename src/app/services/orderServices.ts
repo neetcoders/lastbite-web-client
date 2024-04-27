@@ -29,7 +29,7 @@ export type orderList = {
 export async function getOrderList () {
     try {
         const token = await getAuthToken()
-        const response = await apiClient.get<ResponseSchema<orderList[]>>('/order/store/details?status=waiting', {
+        const response = await apiClient.get<ResponseSchema<orderList[]>>('/order/store/details?status=all', {
             headers: {
                 Authorization: `Bearer ${token}`
             }

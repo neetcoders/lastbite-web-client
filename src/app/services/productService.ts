@@ -109,7 +109,7 @@ export async function addNewProduct ( newProductData : any ) {
 
 export async function getPublicProduct ( searchedProduct? : string ){
   try {
-    const response = await apiClient.get<ResponseSchema<IProduct[]>>(`/product/public?limit=20&offset=0&distance=10000&search=${searchedProduct || 'indomie'}`)
+    const response = await apiClient.get<ResponseSchema<IProduct[]>>(`/product/public?limit=20&offset=0&distance=2000000&search=${searchedProduct || 'indomie'}`)
     if(response.data.data){
       return response.data.data;
     } else {
