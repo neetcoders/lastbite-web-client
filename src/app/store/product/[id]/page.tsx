@@ -1,4 +1,9 @@
-import DetailPage from "./page.client";
+import { useCallback, useEffect, useState } from "react";
+import EditProductModal from "@/components/StoreComponents/EditProductModal";
+import { IProduct, deleteProductById, editProduct, getProductDetails } from "@/app/services/productService";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ButtonDangerLarge, ButtonSuccessLarge } from "@/components/Button/Button";
 
 export const metadata = { title: "Product Detail" };
 

@@ -1,6 +1,3 @@
-import StoreProductPage from "./page.client";
-
-
 import { IProduct, addNewProduct, getMyProducts } from "@/app/services/productService";
 import { uploadStoreImage } from "@/app/services/uploadService";
 import AddProductModal from "@/components/StoreComponents/AddProductModal";
