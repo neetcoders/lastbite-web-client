@@ -72,7 +72,7 @@ const DashboardPage = () => {
                 productName={data.display_name}
                 originPrice={data.price_before}
                 salePrice={data.price_after}
-                location={data.store?.address?.street}
+                location={data.store?.display_name}
                 image_url={data.image_url}
               />
             ))}

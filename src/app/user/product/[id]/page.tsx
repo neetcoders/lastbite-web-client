@@ -73,8 +73,22 @@ function DetailPage({ params }: any) {
                 Rp{productDetails?.price_after}
               </p>
             </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-title font-bold text-success-main">Store</p>
+              <p className="text-title font-bold text-typo-main">
+                {productDetails?.store.display_name}
+              </p>
+            </div>
           </div>
           <div className="flex flex-col gap-2 lg:w-1/2">
+            <div className="flex flex-col gap-1">
+              <p className="text-title font-bold text-success-main">
+                Store Address
+              </p>
+              <p className="text-title font-bold text-typo-main">
+                {productDetails?.store.address.street}
+              </p>
+            </div>
             <div className="flex flex-col gap-1">
               <p className="text-title font-bold text-success-main">Exp Date</p>
               <p className="text-title font-bold text-typo-main">
