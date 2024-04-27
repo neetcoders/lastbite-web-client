@@ -25,7 +25,6 @@ function StoreProductCard(props: IStoreProductCardProps) {
     <button onClick={() => handleDetailProduct(productId)}>
       <div className="flex flex-col text-left gap-[15px] w-full h-[262px] border-[1px] justify-center border-typo-main rounded-[5px] px-2 py-2.5">
         <div className="flex justify-center">
-          {/* <img src="https://placehold.co/100x100" alt="product-image" /> */}
           <Image 
             src={productImage || "https://placehold.co/100x100"} 
             width={150}
