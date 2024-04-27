@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer";
 import { getPublicProduct, IProduct } from "@/app/services/productService";
 import InputSearch from "@/components/BuyerDashboard/InputSearch";
-import ProductCard from "@/components/ProductCard";
+import ProductPublicCard from "@/components/ProductCard";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -59,13 +59,13 @@ export default function Home() {
             {productDisplayed != null ? (
               <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
                 {productDisplayed?.map((data) => (
-                  <ProductCard
+                  <ProductPublicCard
                     key={data.id}
                     productId={data.id}
                     productName={data.display_name}
                     originPrice={data.price_before}
                     salePrice={data.price_after}
-                    location={data.store?.address?.street}
+                    location={data.store?.display_name}
                     image_url={data.image_url}
                   />
                 ))}

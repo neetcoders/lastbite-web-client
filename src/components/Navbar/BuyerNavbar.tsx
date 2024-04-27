@@ -13,7 +13,6 @@ import { logout } from "@/app/services/userService";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
 import { useRouter } from "next/navigation";
 
-
 const BuyerNavbar = () => {
   const router = useRouter();
   const { currentUser, refetchCurrentUser } = useContext(AuthContext);

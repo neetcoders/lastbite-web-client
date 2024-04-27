@@ -1,5 +1,4 @@
 "use client";
-import { getMyAddress } from "@/app/services/addressService";
 import { getUserActiveAddress, IAddress } from "@/app/services/addressService";
 import { AuthContext } from "@/app/services/BuyerAuthContext";
 import { getPublicProduct, getUserNearestProduct, IProduct } from "@/app/services/productService";

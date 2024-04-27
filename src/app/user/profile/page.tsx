@@ -8,7 +8,7 @@ import { useCallback } from "react";
 import { IAddress } from "@/app/services/addressService";
 import { addNewAddress } from "@/app/services/addressService";
 import AddressCard from "@/components/BuyerProfilePage/AddressCard";
-import { getMyAddress } from "@/app/services/addressService";
+import { getAllAddress } from "@/app/services/addressService";
 import { useEffect } from "react";
 
 interface IAddressFormData {
@@ -41,7 +41,7 @@ function Page() {
 
   const getAddressList = useCallback(async () => {
     setLoading(true);
-    const addressList = await getMyAddress();
+    const addressList = await getAllAddress();
     setAddresses(addressList || []);
     setLoading(false);
   }, []);
