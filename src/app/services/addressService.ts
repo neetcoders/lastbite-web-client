@@ -77,6 +77,21 @@ export async function deleteAddressById ( id : string ) {
   }
 }
 
+export async function setUserActiveAddress() {
+  try {
+    const token = await getAuthToken();
+    const response = await apiClient.put<ResponseSchema<IAddress>>(`/address/active`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return response.data.data
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export async function getUserActiveAddress() {
   try {
     const token = await getAuthToken();
