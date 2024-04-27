@@ -1,7 +1,19 @@
-import DetailPage from "./page.client";
+"use client";
 
-export const metadata = { title: "Product Detail" };
-
+import {
+  IProduct,
+  deleteProductById,
+  editProduct,
+  getProductDetails,
+} from "@/app/services/productService";
+import {
+  ButtonDangerLarge,
+  ButtonSuccessLarge,
+} from "@/components/Button/Button";
+import EditProductModal from "@/components/StoreComponents/EditProductModal";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface IProductCategory {
   slug: string;
@@ -16,7 +28,6 @@ interface IProductDetails {
   expiration_date: string;
   stock: number;
   category: IProductCategory;
-  image_url?: string;
 }
 
 interface IProductFormData {
@@ -27,10 +38,9 @@ interface IProductFormData {
     exp_date: string;
     // stock: number;
     category: string;
-    image_id?: string;
   }
 
-function DetailPage({ params }: any) {
+export default function DetailPage({ params }: any) {
 
   const router = useRouter()
 
@@ -50,7 +60,7 @@ function DetailPage({ params }: any) {
   const deleteProductHandler = useCallback( async () => {
         await deleteProductById(params.id);
         router.push('/store/product')
-  }, [params.id, router]);
+  }, [params.id]);
 
   const fetchProductDetails = useCallback(async () => {
     const product = await getProductDetails(params.id);
@@ -145,8 +155,4 @@ function DetailPage({ params }: any) {
       </div>
     </div>
   );
-}
-
-export default function Page() {
-  return <DetailPage />;
 }

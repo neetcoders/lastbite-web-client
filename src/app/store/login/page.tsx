@@ -1,7 +1,10 @@
-'use server'
-
 import React from "react";
 import LoginPage from "./Login-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Login Store Page',
+};
 
 const Login = async () => {
 

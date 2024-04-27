@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
-function DetailPage({ params }: any) {
+export default function DetailPage({ params }: any) {
 
   const [productDetails, setProductDetails] = useState<IProduct | null>(null);
 
@@ -73,8 +73,22 @@ function DetailPage({ params }: any) {
                 Rp{productDetails?.price_after}
               </p>
             </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-title font-bold text-success-main">Store</p>
+              <p className="text-title font-bold text-typo-main">
+                {productDetails?.store.display_name}
+              </p>
+            </div>
           </div>
           <div className="flex flex-col gap-2 lg:w-1/2">
+            <div className="flex flex-col gap-1">
+              <p className="text-title font-bold text-success-main">
+                Store Address
+              </p>
+              <p className="text-title font-bold text-typo-main">
+                {productDetails?.store.address.street}
+              </p>
+            </div>
             <div className="flex flex-col gap-1">
               <p className="text-title font-bold text-success-main">Exp Date</p>
               <p className="text-title font-bold text-typo-main">
@@ -106,5 +120,3 @@ function DetailPage({ params }: any) {
     </div>
   );
 }
-
-export default DetailPage;

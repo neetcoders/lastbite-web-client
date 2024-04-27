@@ -8,6 +8,10 @@ export type IAddress = {
   latitude: number;
 }
 
+export type IActiveAddress = {
+  active_address_id: string;
+}
+
 export async function addNewAddress ( newAddressData : any ) {
   try {
     const token = await getAuthToken();
@@ -23,7 +27,7 @@ export async function addNewAddress ( newAddressData : any ) {
   }
 }
 
-export async function getMyAddress() {
+export async function getAllAddress() {
   try {
     const token = await getAuthToken();
 
@@ -77,10 +81,14 @@ export async function deleteAddressById ( id : string ) {
   }
 }
 
-export async function setUserActiveAddress() {
+export async function setUserActiveAddress(active_address_id: string) {
+  const updatedActiveAddressData = {
+    active_address_id: active_address_id,
+  };
+
   try {
     const token = await getAuthToken();
-    const response = await apiClient.put<ResponseSchema<IAddress>>(`/address/active`, {
+    const response = await apiClient.put<ResponseSchema<IActiveAddress>>(`/address/active`, updatedActiveAddressData, {
       headers: {
         Authorization: `Bearer ${token}`,
       }

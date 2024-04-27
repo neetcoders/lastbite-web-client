@@ -5,7 +5,7 @@ import { ButtonSuccessMedium } from "@/components/Button/Button";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
-function OrderDetailPage({ params }: any) {
+export default function OrderDetailPage({ params }: any) {
 const [orderStatus, setOrderStatus] = useState<string | null>(null);
   const [orderDetailData, setOrderDetailData] = useState<
     orderList | null | undefined
@@ -133,5 +133,3 @@ const [orderStatus, setOrderStatus] = useState<string | null>(null);
     </div>
   );
 }
-
-export default OrderDetailPage;

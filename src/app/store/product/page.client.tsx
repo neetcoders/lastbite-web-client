@@ -1,11 +1,8 @@
-import StoreProductPage from "./page.client";
-
+"use client";
 
 import { IProduct, addNewProduct, getMyProducts } from "@/app/services/productService";
-import { uploadStoreImage } from "@/app/services/uploadService";
 import AddProductModal from "@/components/StoreComponents/AddProductModal";
 import StoreProductCard from "@/components/StoreProductCard";
-import ToastMessage from "@/components/ToastMessage";
 import { useCallback, useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 
@@ -17,36 +14,18 @@ interface IProductFormData {
   exp_date: string;
   stock: number;
   category: string;
-  file: FileList;
 }
 
-
-function StoreProductPage() {
+export default function StoreProductPage() {
   const [storeProducts, setStoreProducts] = useState<IProduct[]>([]);
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const addProductModalHandler = async () => {
     setIsAddProductModalOpen(!isAddProductModalOpen);
   };
 
   const handleAddProductSubmit = useCallback(async (formData: IProductFormData) => {
-    let imageId = null;
-
-    if (formData.file && formData.file[0]) {
-      const upload = await uploadStoreImage(formData.file[0]);
-
-      if (upload?.status === "success") {
-        imageId = upload?.data.id;
-      }
-      else {
-        setErrorMessage(upload?.message || "");
-        setIsAddProductModalOpen(false);
-        return;
-      }
-    }
-
     const addedProductData = {
       display_name: formData.name,
       description: formData.description,
@@ -55,7 +34,6 @@ function StoreProductPage() {
       expiration_date: formData.exp_date,
       stock: formData.stock,
       category_slug: formData.category,
-      image_id: imageId,
     };
     
     await addNewProduct(addedProductData);
@@ -92,12 +70,6 @@ function StoreProductPage() {
         </button>
       </div>
 
-      <ToastMessage 
-        onClose={() => setErrorMessage("")} 
-        isOpen={errorMessage !== ""} 
-        message={errorMessage}
-      />
-
       {loading ? (
         <div>Loading...</div>
       ) : (
@@ -118,10 +90,3 @@ function StoreProductPage() {
     </div>
   );
 }
-
-export const metadata = { title: "Product" };
-
-export default function Page() {
-  return <StoreProductPage />;
-}
-        
