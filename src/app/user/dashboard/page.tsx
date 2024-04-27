@@ -63,8 +63,6 @@ const DashboardPage = () => {
 
         <InputSearch onSubmit={handleSearchProductSubmit}/>
 
-        {searchParams}
-
         {productDisplayed != null ? (
           <div className="grid grid-cols-2 gap-5 justify-center items-center lg:grid-cols-6">
             {productDisplayed?.map((data) => (
